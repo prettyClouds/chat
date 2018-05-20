@@ -47,7 +47,7 @@ Template.createChannel.helpers({
 	autocomplete(key) {
 		const instance = Template.instance();
 		const param = instance.ac[key];
-		return typeof param === 'function' ? param.apply(instance.ac): param;
+		return typeof param === 'function' ? param.apply(instance.ac) : param;
 	},
 	items() {
 		return Template.instance().ac.filteredList();
@@ -96,7 +96,7 @@ Template.createChannel.helpers({
 		return !RocketChat.authz.hasAllPermission(['create-c', 'create-p']);
 	},
 	roomTypeIsP() {
-		return Template.instance().type.get() === 'p';
+		return false;
 	},
 	createIsDisabled() {
 		const instance = Template.instance();
@@ -125,7 +125,7 @@ Template.createChannel.helpers({
 	extensionsConfig() {
 		const instance = Template.instance();
 		return {
-			validations : instance.extensions_validations,
+			validations: instance.extensions_validations,
 			submits: instance.extensions_submits,
 			change: instance.change
 		};
@@ -202,10 +202,8 @@ Template.createChannel.events({
 		e.preventDefault();
 		e.stopPropagation();
 		const name = e.target.name.value;
-		const type = instance.type.get();
-		const readOnly = instance.readOnly.get();
-		const broadcast = instance.broadcast.get();
-		const isPrivate = type === 'p';
+		const readOnly = false;
+		const broadcast = false;
 
 		if (instance.invalid.get() || instance.inUse.get()) {
 			return e.target.name.focus();
@@ -216,10 +214,10 @@ Template.createChannel.events({
 
 		const extraData = Object.keys(instance.extensions_submits)
 			.reduce((result, key) => {
-				return { ...result, ...instance.extensions_submits[key](instance) };
+				return {...result, ...instance.extensions_submits[key](instance)};
 			}, {broadcast});
 
-		Meteor.call(isPrivate ? 'createPrivateGroup' : 'createChannel', name, instance.selectedUsers.get().map(user => user.username), readOnly, {}, extraData, function(err, result) {
+		Meteor.call('createChannel', name, instance.selectedUsers.get().map(user => user.username), readOnly, {}, extraData, function(err, result) {
 			if (err) {
 				if (err.error === 'error-invalid-name') {
 					return instance.invalid.set(true);
@@ -230,11 +228,9 @@ Template.createChannel.events({
 				return;
 			}
 
-			if (!isPrivate) {
-				RocketChat.callbacks.run('aftercreateCombined', { _id: result.rid, name: result.name });
-			}
+			RocketChat.callbacks.run('aftercreateCombined', {_id: result.rid, name: result.name});
 
-			return FlowRouter.go(isPrivate ? 'group' : 'channel', { name: result.name }, FlowRouter.current().queryParams);
+			return FlowRouter.go('channel', {name: result.name}, FlowRouter.current().queryParams);
 		});
 		return false;
 	}
@@ -256,7 +252,7 @@ Template.createChannel.onRendered(function() {
 Template.createChannel.onCreated(function() {
 	this.selectedUsers = new ReactiveVar([]);
 
-	const filter = {exceptions :[Meteor.user().username].concat(this.selectedUsers.get().map(u => u.username))};
+	const filter = {exceptions: [Meteor.user().username].concat(this.selectedUsers.get().map(u => u.username))};
 	// this.onViewRead:??y(function() {
 	Tracker.autorun(() => {
 		filter.exceptions = [Meteor.user().username].concat(this.selectedUsers.get().map(u => u.username));
@@ -299,7 +295,7 @@ Template.createChannel.onCreated(function() {
 
 	this.ac = new AutoComplete(
 		{
-			selector:{
+			selector: {
 				item: '.rc-popup-list__item',
 				container: '.rc-popup-list__list'
 			},
@@ -308,7 +304,7 @@ Template.createChannel.onCreated(function() {
 			inputDelay: 300,
 			rules: [
 				{
-				// @TODO maybe change this 'collection' and/or template
+					// @TODO maybe change this 'collection' and/or template
 					collection: 'UserAndRoom',
 					subscription: 'userAutocomplete',
 					field: 'username',
@@ -316,7 +312,7 @@ Template.createChannel.onCreated(function() {
 					filter,
 					doNotChangeWidth: false,
 					selector(match) {
-						return { term: match };
+						return {term: match};
 					},
 					sort: 'username'
 				}

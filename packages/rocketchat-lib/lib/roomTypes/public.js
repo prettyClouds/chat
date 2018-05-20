@@ -20,7 +20,7 @@ export class PublicRoomType extends RoomTypeConfig {
 			identifier: 'c',
 			order: 30,
 			icon: 'hashtag',
-			label: 'Channels',
+			label: 'Patients',
 			route: new PublicRoomRoute()
 		});
 	}
