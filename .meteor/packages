@@ -75,12 +75,6 @@ rocketchat:grant-google
 rocketchat:graphql
 rocketchat:highlight-words
 rocketchat:iframe-login
-rocketchat:importer
-rocketchat:importer-csv
-rocketchat:importer-hipchat
-rocketchat:importer-hipchat-enterprise
-rocketchat:importer-slack
-rocketchat:importer-slack-users
 rocketchat:integrations
 rocketchat:internal-hubot
 rocketchat:irc
