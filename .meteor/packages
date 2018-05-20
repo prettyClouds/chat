@@ -55,8 +55,6 @@ rocketchat:colors
 rocketchat:crowd
 rocketchat:custom-oauth
 rocketchat:custom-sounds
-rocketchat:dolphin
-rocketchat:drupal
 rocketchat:emoji
 rocketchat:emoji-custom
 rocketchat:emoji-emojione
@@ -64,8 +62,6 @@ rocketchat:error-handler
 rocketchat:favico
 rocketchat:file
 rocketchat:file-upload
-rocketchat:github-enterprise
-rocketchat:gitlab
 rocketchat:grant
 rocketchat:grant-facebook
 rocketchat:grant-github
@@ -143,7 +139,6 @@ rocketchat:user-data-download
 rocketchat:version
 rocketchat:videobridge
 rocketchat:webrtc
-rocketchat:wordpress
 rocketchat:nrr
 
 konecty:change-case
